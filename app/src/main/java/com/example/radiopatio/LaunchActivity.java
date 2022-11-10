@@ -86,22 +86,8 @@ public class LaunchActivity extends AppCompatActivity {
 
                         // Something went wrong when attempting to connect! Handle errors here
 
-                        new AlertDialog.Builder(LaunchActivity.this)
-                                .setTitle("Error de conexión")
-                                .setMessage("¿Quiere reintentar la conexión?")
+                        retryConnexion();
 
-                                // Specifying a listener allows you to take an action before dismissing the dialog.
-                                // The dialog is automatically dismissed when a dialog button is clicked.
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        launchAct.recreate();
-                                    }
-                                })
-                                /*
-                                // A null listener allows the button to dismiss the dialog and take no further action.
-                                .setNegativeButton(android.R.string.no, null)*/
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
                     }
                 });
 
@@ -132,14 +118,37 @@ public class LaunchActivity extends AppCompatActivity {
 
                 // Auth flow returned an error
                 case ERROR:
+                    retryConnexion();
+
                     Log.i("Error", "Ha ocurrido un error al recibir el token");
                     break;
 
                 // Most likely auth flow was cancelled
                 default:
+                    retryConnexion();
                     Log.i("ErrorDEF", "NOT FOUND");
+                    break;
             }
         }
+    }
+
+    public void retryConnexion(){
+        new AlertDialog.Builder(LaunchActivity.this)
+                .setTitle("Error de conexión")
+                .setMessage("¿Quiere reintentar la conexión?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        launchAct.recreate();
+                    }
+                })
+                /*
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)*/
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
 }
