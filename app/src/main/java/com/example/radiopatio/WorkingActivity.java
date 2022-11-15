@@ -1,5 +1,6 @@
 package com.example.radiopatio;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.radiopatio.R;
 import com.example.radiopatio.databinding.ActivityMainBinding;
+import com.example.radiopatio.utility.SpotifyEndpoints;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
 import com.spotify.protocol.types.Track;
@@ -21,6 +23,7 @@ public class WorkingActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private static String USER_TOKEN = "";
     private SpotifyAppRemote mSpotifyAppRemote;
+    private static SpotifyEndpoints spotifyEndpoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,8 @@ public class WorkingActivity extends AppCompatActivity {
 
             mSpotifyAppRemote = LaunchActivity.getSpotifyAppRemote();
             //The key argument here must match that used in the other activity
+
+            spotifyEndpoints = new SpotifyEndpoints(USER_TOKEN, this);
 
             LaunchActivity.killLaunch();
 
@@ -78,5 +83,9 @@ public class WorkingActivity extends AppCompatActivity {
 
     public static String getUserToken() {
         return USER_TOKEN;
+    }
+
+    public static SpotifyEndpoints getSpotifyEndpoints() {
+        return spotifyEndpoints;
     }
 }

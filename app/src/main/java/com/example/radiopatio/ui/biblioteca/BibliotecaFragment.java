@@ -1,4 +1,4 @@
-package com.example.radiopatio.ui.notifications;
+package com.example.radiopatio.ui.biblioteca;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,14 +12,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.radiopatio.databinding.FragmentNotificationsBinding;
 
-public class NotificationsFragment extends Fragment {
+public class BibliotecaFragment extends Fragment {
 
     private FragmentNotificationsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        NotificationsViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
+        BibliotecaViewModel notificationsViewModel =
+                new ViewModelProvider(this).get(BibliotecaViewModel.class);
 
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

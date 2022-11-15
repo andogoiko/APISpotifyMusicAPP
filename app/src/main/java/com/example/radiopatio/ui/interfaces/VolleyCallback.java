@@ -1,8 +1,9 @@
 package com.example.radiopatio.ui.interfaces;
 
-import org.json.JSONObject;
+import com.example.radiopatio.models.Cancion;
+
+import java.util.ArrayList;
 
 public interface VolleyCallback {
-    JSONObject onSuccess(JSONObject result);
-    void onError(String result);
+    ArrayList<Cancion> onSuccess(String  result);
 }
