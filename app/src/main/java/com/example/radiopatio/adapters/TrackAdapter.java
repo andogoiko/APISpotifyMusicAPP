@@ -52,7 +52,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder>{
             @Override
             public void onClick(View view) {
 
-                spotifyEndpoints.playTrack();
+                spotifyEndpoints.playTrack(model.getTrackUri(), model.getAlbumUri());
 
             }
         });

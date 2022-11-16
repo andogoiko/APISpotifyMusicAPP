@@ -14,6 +14,7 @@ import com.example.radiopatio.R;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
+import com.spotify.android.appremote.api.error.SpotifyConnectionTerminatedException;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -89,6 +90,19 @@ public class LaunchActivity extends AppCompatActivity {
                         // Something went wrong when attempting to connect! Handle errors here
 
                         retryConnexion();
+
+                        //este fragmento es para que cuando estés AFK y se active el timeout que cierra la sesión, te reconecte diractamente y no se cierre la app forzosamente por algún proceso aparte
+
+                        //connectionState = ConnectionState.DISCONNECTED;
+
+                        if(throwable instanceof SpotifyConnectionTerminatedException){
+
+
+                            SpotifyAppRemote.connect(launchAct, connectionParams, this);
+                        } else {
+                            Log.e("SpotifyConnection", "Canceling suspend functions");
+                            //callSuspendFunctionStateCallbacks(ConnectionState.DISCONNECTED);
+                        }
 
                     }
                 });

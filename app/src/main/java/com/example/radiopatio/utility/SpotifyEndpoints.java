@@ -117,7 +117,17 @@ public class SpotifyEndpoints {
         //https://developer.spotify.com/console/put-pause/
     }
 
-    public void anyadir
+    public void addToPLayer(){
+        //https://developer.spotify.com/console/post-queue/
+    }
+
+    public void skipToPrev(){
+        //https://developer.spotify.com/console/post-previous/
+    }
+
+    public void skipToNext(){
+        //https://developer.spotify.com/console/post-next/
+    }
 
     public void searchSongs(String songName){
 
@@ -220,6 +230,10 @@ public class SpotifyEndpoints {
 
     public void recentlyPlayed(){
         //https://developer.spotify.com/console/get-recently-played/?limit=&after=&before=
+    }
+
+    public void setVolume(){
+        //https://developer.spotify.com/console/put-volume/
     }
 
 }
