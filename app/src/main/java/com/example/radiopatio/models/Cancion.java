@@ -13,6 +13,8 @@ public class Cancion extends Album{
         this.trackExternalURL = trackExternalURL;;
     }
 
+    public Cancion(){}
+
     public String getNomTrack() {
         return nomTrack;
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,5 +30,62 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/layout_border_rounded"
+        android:backgroundTint="#2d2d2d"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/nav_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/iPlayingCaratula"
+            android:layout_width="42.66dp"
+            android:layout_height="42.66dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/llInfo"
+            android:layout_width="194dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSongName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToOutline="true"
+                android:text="me cago"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvArtistName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="en tu puta madre"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@android:drawable/ic_media_play" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

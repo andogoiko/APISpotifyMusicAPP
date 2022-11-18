@@ -15,6 +15,7 @@ public class Album {
         this.albumImgURL = albumImgURL;
         this.nomArtista = nomArtista;
     }
+    public Album(){}
 
     public String getNomAlbum() {
         return nomAlbum;
