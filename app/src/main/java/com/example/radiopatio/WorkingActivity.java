@@ -2,14 +2,19 @@ package com.example.radiopatio;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,22 +26,26 @@ import com.example.radiopatio.models.Cancion;
 import com.example.radiopatio.utility.SpotifyEndpoints;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
+import com.spotify.protocol.client.CallResult;
+import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
-import com.squareup.picasso.Picasso;
 
 public class WorkingActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private static String USER_TOKEN = "";
-    private SpotifyAppRemote mSpotifyAppRemote;
+    private static SpotifyAppRemote mSpotifyAppRemote;
     private static SpotifyEndpoints spotifyEndpoints;
-    private Activity workingAct;
+    private static Activity workingAct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
+
+        ImageView finalPlayControl = (ImageView) findViewById(R.id.playControl);
+
         if (extras != null) {
 
             USER_TOKEN = extras.getString("token");
@@ -64,14 +73,23 @@ public class WorkingActivity extends AppCompatActivity {
 
                             ImageView ivPortada = (ImageView) findViewById(R.id.iPlayingCaratula);
 
-                            spotifyEndpoints.getCurrentTrack(track.name, track.artist.name, ivPortada, workingAct);
+                            mSpotifyAppRemote.getImagesApi().getImage(track.imageUri).setResultCallback(
+                                    new CallResult.ResultCallback<Bitmap>() {
+                                        @Override public void onResult(Bitmap bitmap) {
 
-                            nameTrack.setText(track.name);
+                                            ivPortada.setImageBitmap(bitmap);
 
-                            nameArtist.setText(track.artist.name);
+                                            nameTrack.setText(track.name);
 
-                            //ivPortada.setImageURI();
+                                            nameArtist.setText(track.artist.name);
+                                        }
+                                    });
 
+                            if (playerState.isPaused){
+                                finalPlayControl.setImageResource(R.drawable.play);
+                            }else{
+                                finalPlayControl.setImageResource(R.drawable.pause);
+                            }
                         }
                     });
         }
@@ -90,6 +108,62 @@ public class WorkingActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        LinearLayout player = (LinearLayout) findViewById(R.id.llPlayer);
+
+        ImageView playControl = (ImageView) findViewById(R.id.playControl);
+
+        player.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                FragmentContainerView fcvNowPlay = (FragmentContainerView) findViewById(R.id.fragmentContainerView4);
+
+                fcvNowPlay.setVisibility(View.VISIBLE);
+
+                BottomNavigationView bnvMenu = (BottomNavigationView) findViewById(R.id.nav_view);
+
+                bnvMenu.setVisibility(View.GONE);
+
+                View fragmentNav = (View) findViewById(R.id.nav_host_fragment_activity_main);
+
+                fragmentNav.setVisibility(View.GONE);
+
+                LinearLayout llPlayer = (LinearLayout) findViewById(R.id.llPlayer);
+
+                llPlayer.setVisibility(View.GONE);
+
+            }
+        });
+
+        playControl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mSpotifyAppRemote.getPlayerApi().getPlayerState()
+                        .setResultCallback(playerState -> {
+                            final Track track = playerState.track;
+
+                            if (playerState.isPaused){
+
+                                playControl.setImageResource(R.drawable.play);
+
+                                mSpotifyAppRemote.getPlayerApi().resume();
+
+                            }else{
+
+                                playControl.setImageResource(R.drawable.pause);
+
+                                mSpotifyAppRemote.getPlayerApi().pause();
+
+                            }
+                        }).setErrorCallback(throwable -> {
+                            // =(
+                        });
+
+
+            }
+        });
 
 
 
@@ -115,4 +189,11 @@ public class WorkingActivity extends AppCompatActivity {
         return spotifyEndpoints;
     }
 
+    public static SpotifyAppRemote getmSpotifyAppRemote() {
+        return mSpotifyAppRemote;
+    }
+
+    public static Activity getWorkingAct() {
+        return workingAct;
+    }
 }

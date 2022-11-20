@@ -2,6 +2,7 @@ package com.example.radiopatio.utility;
 
 
 import static com.example.radiopatio.ui.buscador.BuscadorViewModel.trackList;
+import static com.example.radiopatio.ui.home.HomeViewModel.last10Heard;
 
 import android.app.Activity;
 import android.util.Log;
@@ -115,63 +116,16 @@ public class SpotifyEndpoints {
 
     }
 
-    public void getCurrentTrack(String songName, String artist, ImageView ivPortada, Activity workingAct){
 
-        songName = songName.replaceAll("\\s", "%20");
+    public void stopTrack(){
 
-        String endpoint = "https://api.spotify.com/v1/search?q=" + songName + "&type=track";
+        String endpoint = "https://api.spotify.com/v1/me/player/pause";
 
-        JsonObjectRequest devicesResquest = new JsonObjectRequest(Request.Method.GET, endpoint, null,
+        JsonObjectRequest devicesResquest = new JsonObjectRequest(Request.Method.PUT, endpoint, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        trackList = new ArrayList<Cancion>();
-
-                        JSONArray tracks = null;
-
-                        Cancion currentTrack = null;
-
-                        try {
-
-                            tracks = response.getJSONObject("tracks").getJSONArray("items");
-
-                            for (int i = 0; i < tracks.length(); i++) {
-
-                                JSONObject row = tracks.getJSONObject(i);
-
-                                Log.i("recog", row.getJSONObject("album").getJSONArray("artists").getJSONObject(0).getString("name"));
-                                Log.i("enviado", artist);
-
-                                if(row.getJSONObject("album").getJSONArray("artists").getJSONObject(0).getString("name").equals(artist)){
-
-                                    currentTrack = new Cancion(
-                                            row.getJSONObject("album").getString("name"),
-                                            row.getJSONObject("album").getJSONArray("artists").getJSONObject(0).getString("name"),
-                                            row.getJSONObject("album").getString("uri"),
-                                            row.getJSONObject("album").getJSONObject("external_urls").getString("spotify"),
-                                            row.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url"),
-                                            row.getString("name"),
-                                            row.getString("uri"),
-                                            row.getJSONObject("external_urls").getString("spotify"));
-
-
-                                    Cancion finalCurrentTrack = currentTrack;
-                                    workingAct.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Picasso.get().load(finalCurrentTrack.getAlbumImgURL()).into(ivPortada);
-                                        }
-                                    });
-
-                                    break;
-                                }
-
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
 
                     }
                 }, new Response.ErrorListener() {
@@ -193,10 +147,7 @@ public class SpotifyEndpoints {
         };
 
         rq.add(devicesResquest);
-    }
 
-    public void stopTrack(){
-        //https://developer.spotify.com/console/put-pause/
     }
 
     public void addToPLayer(){
@@ -212,10 +163,6 @@ public class SpotifyEndpoints {
     }
 
     public void searchSongs(String songName){
-
-        final String[] rawRes = new String[1];
-
-        ArrayList<Cancion> canciones = new ArrayList<>();
 
         songName = songName.replaceAll("\\s", "%20");
 
@@ -312,6 +259,69 @@ public class SpotifyEndpoints {
 
     public void recentlyPlayed(){
         //https://developer.spotify.com/console/get-recently-played/?limit=&after=&before=
+
+        String endpoint = "https://api.spotify.com/v1/me/player/recently-played?limit=10";
+
+        Log.i("TokenLast", USER_TOKEN);
+
+        JsonObjectRequest devicesResquest = new JsonObjectRequest(Request.Method.GET, endpoint, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        last10Heard = new ArrayList<Cancion>();
+
+                        JSONArray tracks = null;
+
+                        Cancion srchdTrack;
+
+                        try {
+
+                            tracks = response.getJSONArray("items");
+
+                            for (int i = 0; i < tracks.length(); i++) {
+                                JSONObject row = tracks.getJSONObject(i);
+
+                                srchdTrack = new Cancion(
+                                        row.getJSONObject("track").getJSONObject("album").getString("name"),
+                                        row.getJSONObject("track").getJSONArray("artists").getJSONObject(0).getString("name"),
+                                        row.getJSONObject("track").getJSONObject("album").getString("uri"),
+                                        row.getJSONObject("track").getJSONObject("album").getJSONObject("external_urls").getString("spotify"),
+                                        row.getJSONObject("track").getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url"),
+                                        row.getJSONObject("track").getString("name"),
+                                        row.getJSONObject("track").getString("uri"),
+                                        row.getJSONObject("track").getJSONObject("external_urls").getString("spotify"));
+
+                                last10Heard.add(srchdTrack);
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("Accept", "application/json");
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", USER_TOKEN);
+                params.put("User-Agent", "Mozilla/5.0");
+
+                return params;
+            }
+        };
+
+        rq.add(devicesResquest);
+
+
     }
 
     public void setVolume(){

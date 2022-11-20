@@ -32,6 +32,7 @@
         app:navGraph="@navigation/mobile_navigation" />
 
     <LinearLayout
+        android:id="@+id/llPlayer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -53,7 +54,7 @@
 
         <LinearLayout
             android:id="@+id/llInfo"
-            android:layout_width="194dp"
+            android:layout_width="232dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
@@ -64,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToOutline="true"
-                android:text="me cago"
+                android:text="-"
                 android:textAlignment="textStart"
                 android:textColor="@color/white"
                 android:textSize="16sp"
@@ -74,18 +75,33 @@
                 android:id="@+id/tvArtistName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="en tu puta madre"
+                android:text="-"
                 android:textAlignment="textStart"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/playControl"
+            android:layout_width="100px"
+            android:layout_height="100px"
             android:layout_gravity="center_vertical"
-            app:srcCompat="@android:drawable/ic_media_play" />
+            android:clickable="true"
+            app:srcCompat="@drawable/play" />
     </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView4"
+        android:name="com.example.radiopatio.NowPlayingFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/cardview_dark_background"
+        android:backgroundTint="@color/cardview_dark_background"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/container"
+        app:layout_constraintEnd_toEndOf="@id/container"
+        app:layout_constraintStart_toStartOf="@id/container"
+        app:layout_constraintTop_toTopOf="@id/container"
+        tools:layout="@layout/fragment_now_playing" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

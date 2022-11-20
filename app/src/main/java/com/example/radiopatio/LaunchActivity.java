@@ -57,7 +57,7 @@ public class LaunchActivity extends AppCompatActivity {
         AuthorizationRequest.Builder builder =
                 new AuthorizationRequest.Builder(CLIENT_ID, AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
 
-        builder.setScopes(new String[]{"streaming"});
+        builder.setScopes(new String[]{"streaming user-read-recently-played"}); //aquí añades los scopes necesarios que vaya pidiendote para autorizar
         AuthorizationRequest request = builder.build();
 
         AuthorizationClient.openLoginActivity(this, REQUEST_CODE, request);
@@ -89,8 +89,6 @@ public class LaunchActivity extends AppCompatActivity {
 
                         // Something went wrong when attempting to connect! Handle errors here
 
-                        retryConnexion();
-
                         //este fragmento es para que cuando estés AFK y se active el timeout que cierra la sesión, te reconecte diractamente y no se cierre la app forzosamente por algún proceso aparte
 
                         //connectionState = ConnectionState.DISCONNECTED;
@@ -102,6 +100,8 @@ public class LaunchActivity extends AppCompatActivity {
                         } else {
                             Log.e("SpotifyConnection", "Canceling suspend functions");
                             //callSuspendFunctionStateCallbacks(ConnectionState.DISCONNECTED);
+
+                            retryConnexion();
                         }
 
                     }

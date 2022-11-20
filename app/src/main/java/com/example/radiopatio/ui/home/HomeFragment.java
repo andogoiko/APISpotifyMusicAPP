@@ -1,5 +1,8 @@
 package com.example.radiopatio.ui.home;
 
+import static com.example.radiopatio.WorkingActivity.getUserToken;
+
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.radiopatio.databinding.FragmentHomeBinding;
+import com.example.radiopatio.models.Cancion;
+import com.example.radiopatio.utility.SpotifyEndpoints;
+
+import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
@@ -26,6 +33,8 @@ public class HomeFragment extends Fragment {
 
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+        homeViewModel.HomeViewModelCharge(root);
         return root;
     }
 
