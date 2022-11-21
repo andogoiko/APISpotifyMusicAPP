@@ -22,3 +22,8 @@
     - Clicas en "add new user" y mediante el formulario podrás añadir los usuarios que quieras (hay un límite de 25 si no pagas más).
     - ![dashboard_inicio](/images/dashboard_add_user_form.png)
     - Con esto ya puedes disfrutar de esta app que espero ir mejorando y añadiendo funcionalidades poco a poco.
+
+2. > Funcionalidades
+    - LaunchActivity que loguea automáticamente y autoriza al usuario para utilizar los servicios de Spotify
+    - MainActivity que contiene un player estático y 3 diferentes fragmentos, uno con tus últimos temas escuchados, otro que contiene un buscador y el tercero aún no implementado que tendrá tus distintas playlists
+    - Cada uno de estos hace uso de los objetos de la librería de spotify, cualquier duda puede que se resuelva viendo los comentarios del código.
