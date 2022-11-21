@@ -2,6 +2,7 @@ package com.example.radiopatio.utility;
 
 
 import static com.example.radiopatio.ui.buscador.BuscadorViewModel.trackList;
+import static com.example.radiopatio.ui.home.HomeViewModel.chargeListRecentlyPlayed;
 import static com.example.radiopatio.ui.home.HomeViewModel.last10Heard;
 
 import android.app.Activity;
@@ -299,6 +300,8 @@ public class SpotifyEndpoints {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        chargeListRecentlyPlayed();
 
                     }
                 }, new Response.ErrorListener() {

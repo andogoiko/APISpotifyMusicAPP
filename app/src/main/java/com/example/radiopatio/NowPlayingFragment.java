@@ -5,11 +5,15 @@ import static com.example.radiopatio.WorkingActivity.getmSpotifyAppRemote;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +82,8 @@ public class NowPlayingFragment extends Fragment {
 
         ImageView ivBack = (ImageView) view.findViewById(R.id.ivBack);
 
+        // "minimiza" la info de la canción actua y vuelve a mostrar el main
+
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,6 +118,8 @@ public class NowPlayingFragment extends Fragment {
 
         TextView ivArtista = (TextView) view.findViewById(R.id.tvTrackArtistNameNow);
 
+        // actualiza en vivo la canción que suena
+
         AppRemote mSpotifyAppRemote = getmSpotifyAppRemote();
 
         mSpotifyAppRemote.getPlayerApi()
@@ -143,6 +151,8 @@ public class NowPlayingFragment extends Fragment {
                     // =(
                 });
 
+        // controla el play y pause
+
         ivPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,13 +164,9 @@ public class NowPlayingFragment extends Fragment {
 
                             if (playerState.isPaused){
 
-                                ivPlay.setImageResource(R.drawable.play);
-
                                 mSpotifyAppRemote.getPlayerApi().resume();
 
                             }else{
-
-                                ivPlay.setImageResource(R.drawable.pause);
 
                                 mSpotifyAppRemote.getPlayerApi().pause();
 
@@ -172,6 +178,8 @@ public class NowPlayingFragment extends Fragment {
             }
         });
 
+        // siguiente canción
+
         ImageView ivNext = (ImageView) view.findViewById(R.id.ivNext);
 
         ivNext.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +190,8 @@ public class NowPlayingFragment extends Fragment {
 
             }
         });
+
+        //anterior canción
 
         ImageView ivPrev = (ImageView) view.findViewById(R.id.ivPrev);
 

@@ -3,10 +3,12 @@ package com.example.radiopatio;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +32,8 @@ import com.spotify.protocol.client.CallResult;
 import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
 
+import java.util.Objects;
+
 public class WorkingActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
@@ -42,24 +46,35 @@ public class WorkingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // quitamos el actionbar por defecto para que luego el player recoja la pantalla completa
+
+        Objects.requireNonNull(getSupportActionBar()).hide();
+
+        // recibimos el bundle del intent
+
         Bundle extras = getIntent().getExtras();
 
-        ImageView finalPlayControl = (ImageView) findViewById(R.id.playControl);
-
         if (extras != null) {
+
+            //recogemos parámetros el cogemos el objeto SpotifyAppRemote de la otra actividad
+
+            //The key argument here must match that used in the other activity
 
             USER_TOKEN = extras.getString("token");
 
             mSpotifyAppRemote = LaunchActivity.getSpotifyAppRemote();
-            //The key argument here must match that used in the other activity
+
+            //creamos el objeto de spotifyEndpoints para poder hacer las llmadas a la api cuandos ean necesarias
 
             spotifyEndpoints = new SpotifyEndpoints(USER_TOKEN, this);
+
+            // destruímos el launch activity ya que ha cumplido su fnción de login y auth
 
             LaunchActivity.killLaunch();
 
             workingAct = this;
 
-            // Subscribe to PlayerState
+            // nos suscribimos al PlayerState para poder recoger la canción que suena al momento con sus datos y controlar sue stado
             mSpotifyAppRemote.getPlayerApi()
                     .subscribeToPlayerState()
                     .setEventCallback(playerState -> {
@@ -85,16 +100,21 @@ public class WorkingActivity extends AppCompatActivity {
                                         }
                                     });
 
-                            if (playerState.isPaused){
-                                finalPlayControl.setImageResource(R.drawable.play);
-                            }else{
-                                finalPlayControl.setImageResource(R.drawable.pause);
-                            }
+                        }
+
+                        ImageView finalPlayControl = (ImageView) findViewById(R.id.playControl);
+
+                        if (playerState.isPaused){
+                            finalPlayControl.setImageResource(R.drawable.play);
+                        }else{
+                            finalPlayControl.setImageResource(R.drawable.pause);
                         }
                     });
         }
 
         //mSpotifyAppRemote.getPlayerApi().play("spotify:track:2jnZUvhw2LTvDI6YidRVcO");
+
+        // binding del menú inferior para cambiar entre fragmentos
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -106,12 +126,14 @@ public class WorkingActivity extends AppCompatActivity {
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         LinearLayout player = (LinearLayout) findViewById(R.id.llPlayer);
 
         ImageView playControl = (ImageView) findViewById(R.id.playControl);
+
+        // añadiendo la funcionalidad de abrir el player pequeño para mostrar la canción en tamaño grande
 
         player.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +158,8 @@ public class WorkingActivity extends AppCompatActivity {
             }
         });
 
+        // añadiendo la funcionalidad de pausar y poner en marcha una canción
+
         playControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,13 +170,9 @@ public class WorkingActivity extends AppCompatActivity {
 
                             if (playerState.isPaused){
 
-                                playControl.setImageResource(R.drawable.play);
-
                                 mSpotifyAppRemote.getPlayerApi().resume();
 
                             }else{
-
-                                playControl.setImageResource(R.drawable.pause);
 
                                 mSpotifyAppRemote.getPlayerApi().pause();
 

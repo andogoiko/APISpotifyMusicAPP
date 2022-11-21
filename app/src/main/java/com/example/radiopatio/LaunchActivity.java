@@ -1,5 +1,8 @@
 package com.example.radiopatio;
 
+import static com.example.radiopatio.WorkingActivity.getUserToken;
+import static com.example.radiopatio.ui.home.HomeViewModel.last10Heard;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -11,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.radiopatio.R;
+import com.example.radiopatio.models.Cancion;
+import com.example.radiopatio.utility.SpotifyEndpoints;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -18,6 +23,8 @@ import com.spotify.android.appremote.api.error.SpotifyConnectionTerminatedExcept
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
+
+import java.util.ArrayList;
 
 public class LaunchActivity extends AppCompatActivity {
 
@@ -44,8 +51,13 @@ public class LaunchActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //modo oscuro
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_launch);
         launchAct = this;
     }
@@ -54,10 +66,12 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        // parte de la autorización de spotify, esperaremos a la respuesta del mismo en activity result
+
         AuthorizationRequest.Builder builder =
                 new AuthorizationRequest.Builder(CLIENT_ID, AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
 
-        builder.setScopes(new String[]{"streaming user-read-recently-played"}); //aquí añades los scopes necesarios que vaya pidiendote para autorizar
+        builder.setScopes(new String[]{"streaming user-read-recently-played"}); //aquí añades los scopes necesarios que vaya pidiéndote para autorizar
         AuthorizationRequest request = builder.build();
 
         AuthorizationClient.openLoginActivity(this, REQUEST_CODE, request);
@@ -65,6 +79,8 @@ public class LaunchActivity extends AppCompatActivity {
     }
 
     private void connect() {
+
+        // al recibir el token vamos a crear los parámetros de conexión para recoger el objeto SpotifyRemote
 
         ConnectionParams connectionParams =
                 new ConnectionParams.Builder(CLIENT_ID)
@@ -78,6 +94,8 @@ public class LaunchActivity extends AppCompatActivity {
                     @Override
                     public void onConnected(SpotifyAppRemote spotifyAppRemote) {
 
+                        // al connectarnos correctamente recogemos el objeto y hacemos intent para cambiar de activity y preparamos el objeto de SpotifyRemote para recpgerlo desde la siguiente actividad
+
                         mSpotifyAppRemote = spotifyAppRemote;
 
                         startActivity(i);
@@ -89,7 +107,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                         // Something went wrong when attempting to connect! Handle errors here
 
-                        //este fragmento es para que cuando estés AFK y se active el timeout que cierra la sesión, te reconecte diractamente y no se cierre la app forzosamente por algún proceso aparte
+                        // esta funcionalidad es para que cuando estés AFK y se active el timeout que cierra la sesión del objeto spotifyAppRemote, te reconecte diractamente y no se cierre la app forzosamente por algún proceso aparte
 
                         //connectionState = ConnectionState.DISCONNECTED;
 
@@ -116,10 +134,12 @@ public class LaunchActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE) {
             AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, intent);
 
+            //comporbamos el tipo de respuesta
+
             switch (response.getType()) {
                 // Response was successful and contains auth token
                 case TOKEN:
-                    //Log.i("TOKEN", response.getAccessToken());
+                    //aquí recibimos el token necesario para usar el player de spotify y los endpoints de la api
                     USER_TOKEN = "Bearer " + response.getAccessToken();
 
                     //intent con parámetros para pasar a la main activity (este seria el login digamos)
@@ -147,6 +167,8 @@ public class LaunchActivity extends AppCompatActivity {
             }
         }
     }
+
+    // función que abre una ventana de reintentar por si la conexión ha fallado
 
     public void retryConnexion(){
         new AlertDialog.Builder(LaunchActivity.this)

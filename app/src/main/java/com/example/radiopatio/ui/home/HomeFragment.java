@@ -4,15 +4,19 @@ import static com.example.radiopatio.WorkingActivity.getUserToken;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.radiopatio.R;
 import com.example.radiopatio.databinding.FragmentHomeBinding;
 import com.example.radiopatio.models.Cancion;
 import com.example.radiopatio.utility.SpotifyEndpoints;
@@ -35,7 +39,14 @@ public class HomeFragment extends Fragment {
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
         homeViewModel.HomeViewModelCharge(root);
+
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     @Override
@@ -43,4 +54,6 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+
 }

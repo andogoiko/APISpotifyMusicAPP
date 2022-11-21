@@ -19,23 +19,31 @@
 
         <ImageView
             android:id="@+id/trackImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            android:layout_width="320px"
+            android:layout_height="320px"
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/trackName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="TextView" />
+            android:maxWidth="320px"
+            android:text="-"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/trackArtist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="TextView" />
+            android:maxWidth="320px"
+            android:text="-"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="13sp"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

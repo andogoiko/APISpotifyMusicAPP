@@ -48,11 +48,17 @@ public class BuscadorViewModel extends ViewModel implements SearchView.OnQueryTe
 
         spotify = new SpotifyEndpoints(getUserToken(), (Activity) root.getContext());
 
+        // cojo el buscador que hay implementado
+
         buscadol = root.findViewById(R.id.buscador);
+
+        // le añado un listener con sus 2 métodos a implementar
 
         buscadol.setOnQueryTextListener(this);
 
     }
+
+    // cuando se hace enter se hace una llamada a la api y se recogen los 10 primeros matches para mostrarlos en el recyclerview
 
     @Override
     public boolean onQueryTextSubmit(String s) {
@@ -62,6 +68,8 @@ public class BuscadorViewModel extends ViewModel implements SearchView.OnQueryTe
 
         return false;
     }
+
+    // controla lo que hay escrito
 
     @Override
     public boolean onQueryTextChange(String s) {
@@ -73,6 +81,9 @@ public class BuscadorViewModel extends ViewModel implements SearchView.OnQueryTe
     }
 
     private void setSearchRV(){
+
+        // setea en la lista de búsqueda en el recyclerview
+
         recyclerView = root.findViewById(R.id.trackResult);
         trackAdapter = new TrackAdapter(root.getContext(), trackList);
         linearLayoutManager = new LinearLayoutManager(root.getContext(), LinearLayoutManager.HORIZONTAL, false);
