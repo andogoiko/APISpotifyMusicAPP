@@ -3,8 +3,8 @@
 1. > Instrucciones sobre cómo instalar esta app
     - Hacer un git clone al siguiente repositorio de github: https://github.com/andogoiko/RadioPatioAndrois.git
     - Crear un device nuevo en Android Studio que lleve instalado Google play, ya que es necesario tener spotify instalado para poder usar su servicio de api
-    - Pedir al administrador de esta app que acepte tu correo como usuario válido para esta app, teniendo en cuenta que si no eres premium habrá funcionalidades que no se desempeñen correctamente (Julen te mandaré por correo mi cuenta para que puedas acceder ya que es premium)
-    - Una vez todo esto esté preparado, hay que añadir el usuario y el fingerprint en el dashboard de spotify (https://developer.spotify.com/dashboard/), debes de ser el creador de la app, así que solo funciona con mi cuenta. Por ello al loguearse hay que acceder a la app correspondiente (Radio Patio en eset caso)
+    - PHay que tener en cuenta que si no eres premium habrá funcionalidades que no se desempeñen correctamente (Julen te mandaré por correo mi cuenta para que puedas acceder ya que es premium)
+    - Una vez todo esto esté preparado, hay que añadir el usuario y el fingerprint en el dashboard de spotify (https://developer.spotify.com/dashboard/), debes de ser el creador de la app, así que solo funciona con mi cuenta. Por ello al loguearse hay que acceder a la app correspondiente (Radio Patio en este caso)
     - ![dashboard_inicio](/images/dashboard_inicio.png)
     - Dentro de la app ir a edit settings
     - ![dashboard_inicio](/images/dashboard_edit_settings.png)
